@@ -79,7 +79,8 @@ efi_main (EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
   float x_rotation = 0.0f;
   float z_rotation = 0.0f;
 
-  while (1) {
+  int running = 1;
+  while (running) {
     int IMAGE[HEIGHT*WIDTH];
     float ZBUFFER[HEIGHT*WIDTH];
     for (int i=0; i<WIDTH*HEIGHT; i++) {
@@ -151,7 +152,15 @@ efi_main (EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
       }
       Print(u"\n\r");
     }
+  
+    Print(u"Exit: q");
+    EFI_INPUT_KEY efi_input_key;
+    uefi_call_wrapper(SystemTable->ConIn->ReadKeyStroke, 2, SystemTable->ConIn, &efi_input_key);
+    if (efi_input_key.UnicodeChar == 113){
+      Exit(EFI_SUCCESS, 0, NULL);
+    }
   }
+
 
   return EFI_SUCCESS;
 }
