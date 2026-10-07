@@ -147,7 +147,12 @@ efi_main (EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
     uefi_call_wrapper(SystemTable->ConOut->SetCursorPosition, 3, SystemTable->ConOut, 0, 0);
     for (int i=0; i<HEIGHT; i++) {
       for (int j=0; j<WIDTH; j++) {
-        Print(u"%c", INTENSITY[IMAGE[j + WIDTH * i]]);
+        if (ZBUFFER[j + WIDTH * i] > 0) {
+          Print(u"%c", INTENSITY[IMAGE[j + WIDTH * i]]);
+        }
+        else {
+          Print(u" ");
+        }
       }
       Print(u"\n\r");
     }
