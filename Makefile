@@ -3,6 +3,8 @@ BUILD_DIR := ./build
 GNU_EFI_DIR := ./gnu-efi
 EFI_HEADER = ${GNU_EFI_DIR}/inc
 
+OVMF_PATH := /usr/share/ovmf/OVMF.fd
+
 efi: link
 	mkdir -p ${BUILD_DIR}/EFI/BOOT
 	objcopy -j .text -j .sdata -j .data -j .rodata -j .dynamic -j .dynsym  -j .rel -j .rela -j .rel.* -j .rela.* -j .reloc --output-target efi-app-x86_64 --subsystem=10 ${BUILD_DIR}/main.so ${BUILD_DIR}/EFI/BOOT/bootx64.efi
@@ -23,7 +25,7 @@ run: efi
 		-enable-kvm \
 		-display gtk \
 		-vga std \
-		-bios /usr/share/ovmf/OVMF.fd \
+		-bios  ${OVMF_PATH} \
 		-drive format=raw,file=fat:rw:build
 
 .PHONY: run clean efi link build all
